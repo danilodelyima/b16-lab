@@ -226,3 +226,4 @@ Copyright (C) 2015 Free Software Foundation, Inc.
 
 0.29 0.380556
 
+![graph](https://github.com/danilodelyima/b16-lab/blob/master/graphic.png "Ball Graphic")
