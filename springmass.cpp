@@ -60,7 +60,7 @@ double Mass::getEnergy(double gravity) const
   double energy = 0;
   double E_cinetica, E_potencial; 
 
-  E_cinetica = (mass * (velocity * velocity))/2;
+  E_cinetica = (mass * (velocity.norm2() ))/2;
   E_potencial = mass * gravity * (position.y - radius);
   energy = E_cinetica + E_potencial;
 
@@ -116,12 +116,12 @@ Vector2 Spring::getForce() const
   Vector2 F, u, unitario;
   double current_length, velocidada_de_alongamento;
 
-  u = mass1->getPosition() - mass2.getPosition();
+  u = mass1->getPosition() - mass2->getPosition();
   current_length = u.norm();
   unitario = u/current_length;
   velocidada_de_alongamento = dot( unitario, (mass1->getVelocity() - mass2->getVelocity()) );
 
-  F = (naturalLength - current_length) * stiffness + velocidada_de_alongamento + damping;
+  F = ((naturalLength - current_length) * stiffness + velocidada_de_alongamento + damping) * unitario;
 
   return F ;
 }
@@ -161,26 +161,27 @@ SpringMass::SpringMass(double gravity)
 
 void SpringMass::display()
 {
+  unsigned int i;
 
-  /* INCOMPLETE: TYPE YOUR CODE HERE 
-     Implemente usando dois loops:
-     1. imprima todas as massas
-     2. imprima todas as molas
-     Note que voce pode ousar o operador << diretamente
-     para massas e molas, pois eles foram definidos acima.
-     Posteriormente, imprima a energia total do sistema.     
-   */
+  for(i=0; i < masses.size(); i++)
+    std::cout << masses.at(i) << std::endl;
+  
+  for(i=0; i < springs.size(); i++)
+    std::cout << springs.at(i)<< std::endl;
+  
+  std::cout << getEnergy() << std::endl;
 }
 
 double SpringMass::getEnergy() const
 {
+  unsigned int i;
   double energy = 0 ;
 
-  /* INCOMPLETE: TYPE YOUR CODE HERE 
-     A energia total do sistema eh
-     a soma das energias de todas as massas 
-     + a soma das energias de todas as molas.
-   */
+  for(i=0; i < masses.size(); i++)
+    energy += masses.at(i).getEnergy(gravity);
+
+  for(i=0; i < springs.size(); i++)
+    energy += springs.at(i).getEnergy();
 
   return energy ;
 }
