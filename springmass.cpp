@@ -189,8 +189,13 @@ double SpringMass::getEnergy() const
 void SpringMass::step(double dt)
 {
   Vector2 g(0,-gravity) ; // Vetor da gravidade, i.e.,
+  unsigned int i;
   // aceleracao apontando para baixo.
-  
+  for(i=0; i < masses.size(); i++){
+    masses[i].setForce(g * masses[i].getMass())
+  }
+
+
   /* INCOMPLETE: TYPE YOUR CODE HERE 
      1. para cada massa,
         atualize sua forca usando m*g, i.e.
@@ -208,13 +213,9 @@ int SpringMass::addMass(Mass mass){
   masses.push_back(mass);
   return masses.size();
 }
-/* INCOMPLETE: TYPE YOUR CODE HERE 
 
-   Neste ponto, insira os metodos que estao faltando:
-   um para adicionar uma massa e outro para adicionar uma mola
-   no sistema.
-   O metodo de adicionar mola deve usar referencias 
-   `a massa de cada extremidade e o construtor de mola.
- */
-
+void SpringMass::newSpring(int ref1, int ref2, double naturalLength, double damping, double stiffness){
+  Spring spring(&mass1.at(ref1), &mass2.at(ref2), naturalLength, stiffness, damping = 0.01);
+  springs.push_back(spring);
+}
 
