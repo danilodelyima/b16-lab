@@ -204,16 +204,15 @@ void SpringMass::step(double dt)
    */
 }
 
-
+int SpringMass::addMass(Mass mass){
+  masses.push_back(mass);
+  return masses.size();
+}
 /* INCOMPLETE: TYPE YOUR CODE HERE 
 
    Neste ponto, insira os metodos que estao faltando:
    um para adicionar uma massa e outro para adicionar uma mola
    no sistema.
-   Para adicionar elementos numa estrutura do tipo vector,
-   use o metodo push_back().
-   O metodo de adicionar massa pode retornar o numero total
-   de massas, i.e., return (int)masses.size() -1;
    O metodo de adicionar mola deve usar referencias 
    `a massa de cada extremidade e o construtor de mola.
  */

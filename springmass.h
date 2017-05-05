@@ -100,7 +100,7 @@ public:
   void step(double dt) ;
   void display() ;
   double getEnergy() const ;
-  void addMass(Mass mass);
+  int addMass(Mass mass);
   void newSpring(int ref1, int ref2, double naturalLength, double damping, double stiffness);
 
 protected:
