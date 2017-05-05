@@ -57,15 +57,15 @@ public:
   void step(double dt) ;
 
 protected:
-  Vector2 position ;
+  Vector2 position ; 
   Vector2 velocity ;
   Vector2 force ;
   double mass ;
-  double radius ;
+  double radius ; // Assume-se que as massas sao esferas.
 
-  double xmin ;
-  double xmax ;
-  double ymin ;
+  double xmin ; // Limites, i.e., dimensoes da caixa onde o sistema se encontra,
+  double xmax ; // onde x sao dimensoes horizontais e
+  double ymin ; // y sao dimensoes verticais.
   double ymax ;
 } ;
 
@@ -76,7 +76,7 @@ protected:
 class Spring
 {
 public:
-  Spring(Mass * mass1, Mass * mass2, double naturalLength, double stiff, double damping = 0.01) ;
+  Spring(Mass * mass1, Mass * mass2, double naturalLength, double stiffness, double damping = 0.01) ;
   Mass * getMass1() const ;
   Mass * getMass2() const ;
   Vector2 getForce() const ;
@@ -84,8 +84,8 @@ public:
   double getEnergy() const ;
 
 protected:
-
-/* INCOMPLETE: TYPE YOUR CODE HERE */
+  Mass *mass1, *mass2;
+  double naturalLength, stiffness, damping;
 
 } ;
 
@@ -100,16 +100,16 @@ public:
   void step(double dt) ;
   void display() ;
   double getEnergy() const ;
-
-
-/* INCOMPLETE: TYPE YOUR CODE HERE */
-
+  void addMass(Mass mass);
+  void newSpring(int ref1, int ref2, double naturalLength, double damping, double stiffness);
 
 protected:
   double gravity ;
 
-
-/* INCOMPLETE: TYPE YOUR CODE HERE */
+  typedef std::vector<Mass> mass_t;
+  typedef std::vector<Spring> spring_t;
+  mass_t masses;
+  spring_t springs;
 
 } ;
 
