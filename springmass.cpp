@@ -69,27 +69,22 @@ double Mass::getEnergy(double gravity) const
 
 void Mass::step(double dt)
 {
-  /* INCOMPLETE: TYPE YOUR CODE HERE 
-     Este eh o metodo mais complexo, ele atualiza 
-     - a posicao e 
-     - a velocidade desta massa 
-     usando a 
-     - forca que eh aplicada `a massa (armazenada em
-       atributo protegido) e 
-     - a fracao de tempo (dt).
-     Isso eh feito atravez da aplicacao de equacoes 
-     basicas de mecanica. 
-     1. Calcule a aceleracao:
-        F = m*a  ->  a = m/F
-     2. Atualize a posicao:
-        S = S0 + V*dt + (a*dt^2)/2 
-     3. Atualize a velocidade:
-        V = V0 + a*dt
-     Note que nos passos 2 e 3, eh necessario tratar
-     de colisoes com as paredes da caixa. Para isso,
-     eh melhor separar os calculos de componentes
-     x e y da velocidade e da posicao.
-   */
+  Vector2 a;
+
+  a = force/mass;
+
+  if (xmin + radius <= position.x && position.x <= xmax - radius) {
+    position.x = position.x + (velocity.x*dt + ((a.x*dt*dt)/2));
+    velocity.x = velocity.x + (a.x*dt);
+  } else {
+    velocity.x = -velocity.x;
+  }
+  if (ymin + radius <= position.y && position.y <= ymax - radius) {
+    position.y = position.y + (velocity.y*dt + ((a.y*dt*dt)/2));
+    velocity.y = velocity.y + (a.y*dt);
+  } else {
+    velocity.y = -velocity.y;
+  }
 }
 
 /* ---------------------------------------------------------------- */
@@ -192,21 +187,18 @@ void SpringMass::step(double dt)
   unsigned int i;
   // aceleracao apontando para baixo.
   for(i=0; i < masses.size(); i++){
-    masses[i].setForce(g * masses[i].getMass())
+    masses[i].setForce(g * masses[i].getMass());
   }
 
+  for(i=0; i < springs.size(); i++){
+    springs[i].getMass1()->addForce(-1 * springs[i].getForce());
+    springs[i].getMass2()->addForce(+1 * springs[i].getForce());   
+  }
 
-  /* INCOMPLETE: TYPE YOUR CODE HERE 
-     1. para cada massa,
-        atualize sua forca usando m*g, i.e.
-  masses[i].setForce(g * masses[i].getMass()) 
-     2. para cada mola, obtenha a forca da mola e 
-        adicione-a a cada massa ligada a esta mola, i.e.,
-  springs[i].getMass1()->addForce(-1 * force) ;
-  springs[i].getMass2()->addForce(+1 * force) ;     
-     3. Atualize a posicao e velocidade de todas as massas,
-        i.e., execute o metodo step() delas.
-   */
+  for(i=0; i < masses.size(); i++){
+    masses[i].step(dt);
+  }
+
 }
 
 int SpringMass::addMass(Mass mass){
@@ -215,7 +207,7 @@ int SpringMass::addMass(Mass mass){
 }
 
 void SpringMass::newSpring(int ref1, int ref2, double naturalLength, double damping, double stiffness){
-  Spring spring(&mass1.at(ref1), &mass2.at(ref2), naturalLength, stiffness, damping = 0.01);
+  Spring spring(&masses.at(ref1), &masses.at(ref2), naturalLength, stiffness, damping = 0.01);
   springs.push_back(spring);
 }
 
