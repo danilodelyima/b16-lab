@@ -101,7 +101,7 @@ public:
   void display() ;
   double getEnergy() const ;
   int addMass(Mass mass);
-  void newSpring(int ref1, int ref2, double naturalLength, double damping, double stiffness);
+  void newSpring(int ref1, int ref2, double naturalLength, double stiffness, double damping);
 
 protected:
   double gravity ;

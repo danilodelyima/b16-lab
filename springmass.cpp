@@ -70,21 +70,24 @@ double Mass::getEnergy(double gravity) const
 void Mass::step(double dt)
 {
   Vector2 a;
-
   a = force/mass;
 
-  if (xmin + radius <= position.x && position.x <= xmax - radius) {
-    position.x = position.x + (velocity.x*dt + ((a.x*dt*dt)/2));
+  double xp = position.x + (velocity.x*dt + (a.x*dt*dt*0.5));
+  double yp = position.y + (velocity.y*dt + (a.x*dt*dt*0.5));
+
+  if (xmin + radius <= xp && xp <= xmax - radius) {
+    position.x = xp;
     velocity.x = velocity.x + (a.x*dt);
   } else {
     velocity.x = -velocity.x;
   }
-  if (ymin + radius <= position.y && position.y <= ymax - radius) {
-    position.y = position.y + (velocity.y*dt + ((a.y*dt*dt)/2));
+  if (ymin + radius <= yp && yp <= ymax - radius) {
+    position.y = yp ;
     velocity.y = velocity.y + (a.y*dt);
   } else {
     velocity.y = -velocity.y;
   }
+
 }
 
 /* ---------------------------------------------------------------- */
@@ -116,7 +119,7 @@ Vector2 Spring::getForce() const
   unitario = u/current_length;
   velocidada_de_alongamento = dot( unitario, (mass1->getVelocity() - mass2->getVelocity()) );
 
-  F = ((naturalLength - current_length) * stiffness + velocidada_de_alongamento + damping) * unitario;
+  F = ((current_length - naturalLength)*(-stiffness) - (velocidada_de_alongamento * damping)) * unitario;
 
   return F ;
 }
@@ -191,8 +194,8 @@ void SpringMass::step(double dt)
   }
 
   for(i=0; i < springs.size(); i++){
-    springs[i].getMass1()->addForce(-1 * springs[i].getForce());
-    springs[i].getMass2()->addForce(+1 * springs[i].getForce());   
+    springs[i].getMass1()->addForce(+1 * springs[i].getForce());
+    springs[i].getMass2()->addForce(-1 * springs[i].getForce());   
   }
 
   for(i=0; i < masses.size(); i++){
@@ -206,7 +209,7 @@ int SpringMass::addMass(Mass mass){
   return masses.size();
 }
 
-void SpringMass::newSpring(int ref1, int ref2, double naturalLength, double damping, double stiffness){
+void SpringMass::newSpring(int ref1, int ref2, double naturalLength, double stiffness, double damping){
   Spring spring(&masses.at(ref1), &masses.at(ref2), naturalLength, stiffness, damping = 0.01);
   springs.push_back(spring);
 }
