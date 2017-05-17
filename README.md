@@ -23,6 +23,10 @@ Copyright (C) 2015 Free Software Foundation, Inc.
 4. ball.cpp
     * Implementação de métodos declarados em ball.h.
 
+**Diagrama de Classe**
+
+![graph](https://github.com/danilodelyima/b16-lab/blob/master/dcball.png "Ball diagram")
+
 
 **Saída do programa**
 
